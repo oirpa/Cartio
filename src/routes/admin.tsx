@@ -104,9 +104,9 @@ function SettingsPanel() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (current !== getPassword()) return toast.error("Password lama salah.");
-        if (next.length < 6) return toast.error("Password baru minimal 6 karakter.");
-        if (next !== confirm) return toast.error("Konfirmasi password tidak cocok.");
+        if (current !== getPassword()) { toast.error("Password lama salah."); return; }
+        if (next.length < 6) { toast.error("Password baru minimal 6 karakter."); return; }
+        if (next !== confirm) { toast.error("Konfirmasi password tidak cocok."); return; }
         localStorage.setItem(PASSWORD_KEY, next);
         setCurrent("");
         setNext("");
