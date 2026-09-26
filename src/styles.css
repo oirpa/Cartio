@@ -145,3 +145,11 @@
     color: var(--color-foreground);
   }
 }
+
+@utility card-soft {
+  box-shadow: var(--shadow-card);
+}
+
+@utility hero-surface {
+  background-image: var(--gradient-hero);
+}
