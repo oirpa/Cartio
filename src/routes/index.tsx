@@ -29,6 +29,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { products } = useStore();
   const [cartOpen, setCartOpen] = useState(false);
+  const available = products.filter((p) => !p.soldOut);
+  const soldOut = products.filter((p) => p.soldOut);
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,16 +60,28 @@ function Index() {
           Dimasak fresh setiap pagi, siap diantar jam makan siang.
         </p>
 
-        {products.length === 0 ? (
-          <p className="mt-10 text-center text-sm text-muted-foreground">
-            Belum ada menu tersedia.
-          </p>
-        ) : (
-          <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        <section className="mt-6">
+          <h3 className="text-lg font-bold">Menu Tersedia</h3>
+          {available.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">Belum ada menu tersedia.</p>
+          ) : (
+            <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-3">
+              {available.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {soldOut.length > 0 && (
+          <section className="mt-12 border-t border-border pt-8">
+            <h3 className="text-lg font-bold text-muted-foreground">Menu Habis</h3>
+            <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-3">
+              {soldOut.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
         )}
       </main>
 
