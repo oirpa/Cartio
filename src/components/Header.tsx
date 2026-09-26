@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart } from "lucide-react";
 
+import logo from "@/assets/cartio-logo.png";
 import { useStore } from "@/lib/store";
 
 export function Header({ onCartClick }: { onCartClick: () => void }) {
@@ -9,13 +10,8 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
       <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3">
-        <Link to="/" className="flex min-w-0 items-center gap-2">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-base font-black text-primary-foreground">
-            C
-          </span>
-          <span className="truncate text-xl font-black tracking-tight text-primary">
-            Cartio
-          </span>
+        <Link to="/" className="flex min-w-0 items-center" aria-label="Cartio">
+          <img src={logo} alt="Cartio" className="h-11 w-auto object-contain sm:h-12" />
         </Link>
         <button
           onClick={onCartClick}

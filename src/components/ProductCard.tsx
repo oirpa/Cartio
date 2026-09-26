@@ -30,16 +30,16 @@ export function ProductCard({ product }: { product: Product }) {
           src={product.image}
           alt={product.title}
           loading="lazy"
-          className={`h-full w-full object-cover ${product.soldOut ? "opacity-50" : ""}`}
+          className={`h-full w-full object-cover ${product.soldOut ? "opacity-40 grayscale" : ""}`}
         />
         {product.soldOut && (
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-destructive px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-destructive-foreground">
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-destructive px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-destructive-foreground shadow-md">
             Sold Out
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-4">
+      <div className={`flex flex-1 flex-col gap-3 p-4 ${product.soldOut ? "opacity-60" : ""}`}>
         <div className="min-w-0">
           <h3 className="truncate text-base font-bold">{product.title}</h3>
           <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">

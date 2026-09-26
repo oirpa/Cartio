@@ -10,7 +10,10 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { formatIDR, useStore, type Product } from "@/lib/store";
 
-const PASSWORD = "admincartio";
+const DEFAULT_PASSWORD = "admincartio";
+const PASSWORD_KEY = "cartio.admin.password.v1";
+const getPassword = () =>
+  (typeof window !== "undefined" && localStorage.getItem(PASSWORD_KEY)) || DEFAULT_PASSWORD;
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -64,7 +67,7 @@ function AdminPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (password === PASSWORD) setAuthed(true);
+            if (password === getPassword()) setAuthed(true);
             else toast.error("Password salah.");
           }}
           className="card-soft w-full max-w-sm space-y-4 rounded-2xl border border-border bg-card p-6"
@@ -92,10 +95,49 @@ function AdminPage() {
   return <AdminDashboard />;
 }
 
+function SettingsPanel() {
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (current !== getPassword()) { toast.error("Password lama salah."); return; }
+        if (next.length < 6) { toast.error("Password baru minimal 6 karakter."); return; }
+        if (next !== confirm) { toast.error("Konfirmasi password tidak cocok."); return; }
+        localStorage.setItem(PASSWORD_KEY, next);
+        setCurrent("");
+        setNext("");
+        setConfirm("");
+        toast.success("Password berhasil diperbarui");
+      }}
+      className="card-soft mx-auto max-w-md space-y-3 rounded-2xl border border-border bg-card p-5"
+    >
+      <h2 className="font-bold">Ubah Password Admin</h2>
+      <div className="space-y-1.5">
+        <Label htmlFor="cur">Password Lama</Label>
+        <Input id="cur" type="password" value={current} onChange={(e) => setCurrent(e.target.value)} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="new">Password Baru</Label>
+        <Input id="new" type="password" value={next} onChange={(e) => setNext(e.target.value)} />
+      </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="conf">Konfirmasi Password Baru</Label>
+        <Input id="conf" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+      </div>
+      <Button type="submit" className="w-full">Simpan Password</Button>
+    </form>
+  );
+}
+
 function AdminDashboard() {
   const { products, saveProduct, deleteProduct, toggleSoldOut } = useStore();
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editing, setEditing] = useState(false);
+  const [tab, setTab] = useState<"menu" | "settings">("menu");
 
   const update = (patch: Partial<FormState>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -144,6 +186,18 @@ function AdminDashboard() {
         </div>
       </header>
 
+      <div className="mx-auto flex max-w-5xl gap-2 px-4 pt-6">
+        <Button size="sm" variant={tab === "menu" ? "default" : "outline"} onClick={() => setTab("menu")}>
+          Kelola Menu
+        </Button>
+        <Button size="sm" variant={tab === "settings" ? "default" : "outline"} onClick={() => setTab("settings")}>
+          Pengaturan
+        </Button>
+      </div>
+
+      {tab === "settings" ? (
+        <main className="mx-auto max-w-5xl px-4 py-8"><SettingsPanel /></main>
+      ) : (
       <main className="mx-auto grid max-w-5xl gap-6 px-4 py-8 lg:grid-cols-[360px_minmax(0,1fr)]">
         <form
           onSubmit={handleSubmit}
@@ -280,6 +334,7 @@ function AdminDashboard() {
           ))}
         </section>
       </main>
+      )}
     </div>
   );
 }
