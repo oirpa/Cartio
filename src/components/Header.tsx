@@ -8,7 +8,7 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
   const { cartCount } = useStore();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background shadow-sm">
       <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3">
         <Link to="/" className="flex min-w-0 items-center" aria-label="Cartio">
           <img src={logo} alt="Cartio" className="h-11 w-auto object-contain sm:h-12" />
