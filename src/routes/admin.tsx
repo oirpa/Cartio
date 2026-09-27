@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { formatIDR, useStore, type Product } from "@/lib/store";
+import { CATEGORIES, formatIDR, useStore, type Product } from "@/lib/store";
 
 const DEFAULT_PASSWORD = "admincartio";
 const PASSWORD_KEY = "cartio.admin.password.v1";
