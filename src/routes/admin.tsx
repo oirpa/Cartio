@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { formatIDR, useStore, type Product } from "@/lib/store";
+import { CATEGORIES, formatIDR, useStore, type Product } from "@/lib/store";
 
 const DEFAULT_PASSWORD = "admincartio";
 const PASSWORD_KEY = "cartio.admin.password.v1";
@@ -35,6 +35,7 @@ type FormState = {
   price: string;
   image: string;
   addOns: string;
+  category: string;
 };
 
 const emptyForm: FormState = {
@@ -44,6 +45,7 @@ const emptyForm: FormState = {
   price: "",
   image: "",
   addOns: "",
+  category: "Paket Nasi",
 };
 
 function toForm(product: Product): FormState {
@@ -54,6 +56,7 @@ function toForm(product: Product): FormState {
     price: String(product.price),
     image: product.image,
     addOns: product.addOns.map((a) => `${a.name}:${a.price}`).join(", "),
+    category: product.category ?? "Paket Nasi",
   };
 }
 
@@ -168,6 +171,7 @@ function AdminDashboard() {
       image: form.image.trim() || "https://placehold.co/600x600?text=Cartio",
       soldOut: products.find((p) => p.id === form.id)?.soldOut ?? false,
       addOns,
+      category: form.category,
     });
 
     toast.success(editing ? "Menu diperbarui" : "Menu ditambahkan");
@@ -240,6 +244,19 @@ function AdminDashboard() {
               value={form.price}
               onChange={(e) => update({ price: e.target.value })}
             />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="category">Kategori</Label>
+            <select
+              id="category"
+              value={form.category}
+              onChange={(e) => update({ category: e.target.value })}
+              className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="addons">Add-ons</Label>

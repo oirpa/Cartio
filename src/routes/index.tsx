@@ -4,8 +4,9 @@ import { useState } from "react";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Header } from "@/components/Header";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductDetail } from "@/components/ProductDetail";
 import { Button } from "@/components/ui/button";
-import { useStore } from "@/lib/store";
+import { CATEGORIES, useStore, type Product } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,8 +30,13 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { products } = useStore();
   const [cartOpen, setCartOpen] = useState(false);
-  const available = products.filter((p) => !p.soldOut);
-  const soldOut = products.filter((p) => p.soldOut);
+  const [category, setCategory] = useState("Semua");
+  const [detail, setDetail] = useState<Product | null>(null);
+  const filtered = products.filter(
+    (p) => category === "Semua" || (p.category ?? "Paket Nasi") === category,
+  );
+  const available = filtered.filter((p) => !p.soldOut);
+  const soldOut = filtered.filter((p) => p.soldOut);
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,31 +60,48 @@ function Index() {
         </div>
       </section>
 
-      <main id="menu" className="mx-auto max-w-5xl px-4 py-10">
-        <h2 className="text-2xl font-black tracking-tight">Menu Hari Ini</h2>
+      <main id="menu" className="mx-auto max-w-5xl px-5 py-10">
+        <h2 className="text-2xl font-extrabold tracking-tight">Menu Hari Ini</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Dimasak fresh setiap pagi, siap diantar jam makan siang.
         </p>
 
-        <section className="mt-6">
+        <div className="-mx-5 mt-6 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none]">
+          {["Semua", ...CATEGORIES].map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCategory(c)}
+              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                category === c
+                  ? "border-primary text-primary"
+                  : "border-border text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <section className="mt-8">
           <h3 className="text-lg font-bold">Menu Tersedia</h3>
           {available.length === 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">Belum ada menu tersedia.</p>
           ) : (
-            <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-7 md:grid-cols-3 lg:grid-cols-4">
               {available.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} onOpen={setDetail} />
               ))}
             </div>
           )}
         </section>
 
         {soldOut.length > 0 && (
-          <section className="mt-12 border-t border-border pt-8">
+          <section className="mt-12 pt-2">
             <h3 className="text-lg font-bold text-muted-foreground">Menu Habis</h3>
-            <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-7 md:grid-cols-3 lg:grid-cols-4">
               {soldOut.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} onOpen={setDetail} />
               ))}
             </div>
           </section>
@@ -89,6 +112,7 @@ function Index() {
         © {new Date().getFullYear()} Cartio · Catering kampus
       </footer>
 
+      <ProductDetail product={detail} onClose={() => setDetail(null)} />
       <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
     </div>
   );
