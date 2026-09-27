@@ -23,7 +23,7 @@ export type Product = {
   image: string;
   soldOut: boolean;
   addOns: AddOn[];
-  category?: string;
+  category?: string | undefined;
 };
 
 export const CATEGORIES = ["Paket Nasi", "Minuman", "Add On"] as const;
@@ -35,7 +35,7 @@ export type CartItem = {
   price: number;
   quantity: number;
   addOns: AddOn[];
-  note?: string;
+  note?: string | undefined;
 };
 
 const PRODUCTS_KEY = "cartio.products.v1";
