@@ -23,7 +23,10 @@ export type Product = {
   image: string;
   soldOut: boolean;
   addOns: AddOn[];
+  category?: string;
 };
+
+export const CATEGORIES = ["Paket Nasi", "Minuman", "Add On"] as const;
 
 export type CartItem = {
   key: string;
@@ -32,6 +35,7 @@ export type CartItem = {
   price: number;
   quantity: number;
   addOns: AddOn[];
+  note?: string;
 };
 
 const PRODUCTS_KEY = "cartio.products.v1";
@@ -42,6 +46,7 @@ export const WHATSAPP_NUMBER = "62895370004561";
 export const defaultProducts: Product[] = [
   {
     id: "p1",
+    category: "Paket Nasi",
     title: "Nasi Ayam Geprek",
     description: "Ayam crispy digeprek sambal bawang, nasi hangat, lalapan.",
     price: 20000,
@@ -54,6 +59,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p2",
+    category: "Paket Nasi",
     title: "Nasi Goreng Spesial",
     description: "Nasi goreng kampung dengan telur mata sapi dan acar.",
     price: 22000,
@@ -63,6 +69,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p3",
+    category: "Paket Nasi",
     title: "Chicken Katsu Bowl",
     description: "Katsu ayam saus teriyaki dengan salad segar.",
     price: 25000,
@@ -72,6 +79,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p4",
+    category: "Minuman",
     title: "Es Teh Manis Jumbo",
     description: "Teh melati dingin segar ukuran jumbo 500ml.",
     price: 6000,
@@ -90,7 +98,7 @@ type StoreValue = {
   cart: CartItem[];
   cartCount: number;
   subtotal: number;
-  addToCart: (product: Product, addOns: AddOn[]) => void;
+  addToCart: (product: Product, addOns: AddOn[], quantity?: number, note?: string) => void;
   setQuantity: (key: string, quantity: number) => void;
   removeItem: (key: string) => void;
   clearCart: () => void;
@@ -129,12 +137,15 @@ export function CartioProvider({ children }: { children: ReactNode }) {
     if (hydrated) localStorage.setItem(CART_KEY, JSON.stringify(cart));
   }, [cart, hydrated]);
 
-  const addToCart = useCallback((product: Product, addOns: AddOn[]) => {
-    const key = product.id + "|" + addOns.map((a) => a.id).sort().join(",");
+  const addToCart = useCallback(
+    (product: Product, addOns: AddOn[], quantity = 1, note = "") => {
+    const cleanNote = note.trim();
+    const key =
+      product.id + "|" + addOns.map((a) => a.id).sort().join(",") + (cleanNote ? "|" + cleanNote : "");
     setCart((prev) => {
       const existing = prev.find((i) => i.key === key);
       if (existing) {
-        return prev.map((i) => (i.key === key ? { ...i, quantity: i.quantity + 1 } : i));
+        return prev.map((i) => (i.key === key ? { ...i, quantity: i.quantity + quantity } : i));
       }
       return [
         ...prev,
@@ -143,8 +154,9 @@ export function CartioProvider({ children }: { children: ReactNode }) {
           productId: product.id,
           title: product.title,
           price: product.price,
-          quantity: 1,
+          quantity,
           addOns,
+          note: cleanNote || undefined,
         },
       ];
     });
@@ -234,7 +246,8 @@ export function buildWhatsAppUrl(args: {
     const extras = i.addOns.length
       ? "\n   + " + i.addOns.map((a) => `${a.name} (${formatIDR(a.price)})`).join(", ")
       : "";
-    return `• ${i.quantity}x ${i.title}${extras}\n   ${formatIDR(itemTotal)}`;
+    const note = i.note ? `\n   Catatan: ${i.note}` : "";
+    return `• ${i.quantity}x ${i.title}${extras}${note}\n   ${formatIDR(itemTotal)}`;
   });
 
   const message =
