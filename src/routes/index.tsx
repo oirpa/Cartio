@@ -11,16 +11,16 @@ import { CATEGORIES, useStore, type Product } from "@/lib/store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Cartio — Makan Siang Kampus Praktis" },
+      { title: "Cartio — Pre-order Makanan Praktis" },
       {
         name: "description",
         content:
-          "Pesan makan siang kampus lewat Cartio. Pilih menu, tambah topping, checkout langsung via WhatsApp.",
+          "Pre-order makanan lewat Cartio. Pilih menu, tambah topping, checkout langsung via WhatsApp.",
       },
-      { property: "og:title", content: "Cartio — Makan Siang Kampus Praktis" },
+      { property: "og:title", content: "Cartio — Pre-order Makanan Praktis" },
       {
         property: "og:description",
-        content: "Menu catering kampus praktis, pesan cepat via WhatsApp.",
+        content: "Menu catering modern dan praktis, pesan cepat via WhatsApp.",
       },
     ],
   }),
@@ -48,11 +48,12 @@ function Index() {
             Catering Kampus
           </span>
           <h1 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-5xl">
-            Makan Siang Kampus Praktis bareng Cartio!
+            Pre-order Makanan Praktis bareng Cartio! Pre-order maksimal H-1 ya!
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
             Pilih menu favoritmu, atur topping, dan pesanan langsung dikirim ke gedung
             kelasmu. Bayar gampang lewat WhatsApp.
+            <h1 className="mt-4 text-xl font-bold">Dikirim setiap hari sabtu pagi jam 7:30 ya!</h1>
           </p>
           <Button size="lg" className="mt-7" asChild>
             <a href="#menu">Pesan Sekarang</a>
@@ -63,7 +64,7 @@ function Index() {
       <main id="menu" className="mx-auto max-w-5xl px-5 py-10">
         <h2 className="text-2xl font-extrabold tracking-tight">Menu Hari Ini</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Dimasak fresh setiap pagi, siap diantar jam makan siang.
+          Dimasak fresh setiap pagi, langsung siap diantar!.
         </p>
 
         <div className="-mx-5 mt-6 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none]">
