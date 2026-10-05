@@ -35,8 +35,7 @@ function Index() {
   const filtered = products.filter(
     (p) => category === "Semua" || (p.category ?? "Paket Nasi") === category,
   );
-  const available = filtered.filter((p) => !p.soldOut);
-  const soldOut = filtered.filter((p) => p.soldOut);
+  const vendors = [...new Set(filtered.map((p) => p.vendorName ?? "Lainnya"))];
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,29 +83,34 @@ function Index() {
           ))}
         </div>
 
-        <section className="mt-8">
-          <h3 className="text-lg font-bold">Menu Tersedia</h3>
-          {available.length === 0 ? (
-            <p className="mt-4 text-sm text-muted-foreground">Belum ada menu tersedia.</p>
-          ) : (
-            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-7 md:grid-cols-3 lg:grid-cols-4">
-              {available.map((product) => (
-                <ProductCard key={product.id} product={product} onOpen={setDetail} />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {soldOut.length > 0 && (
-          <section className="mt-12 pt-2">
-            <h3 className="text-lg font-bold text-muted-foreground">Menu Habis</h3>
-            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-7 md:grid-cols-3 lg:grid-cols-4">
-              {soldOut.map((product) => (
-                <ProductCard key={product.id} product={product} onOpen={setDetail} />
-              ))}
-            </div>
-          </section>
+        {vendors.length === 0 && (
+          <p className="mt-8 text-sm text-muted-foreground">Belum ada menu tersedia.</p>
         )}
+        {vendors.map((vendor) => {
+          const items = filtered
+            .filter((p) => (p.vendorName ?? "Lainnya") === vendor)
+            .sort((a, b) => Number(a.soldOut) - Number(b.soldOut));
+          return (
+            <section key={vendor} className="mt-10">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="truncate text-lg font-bold">{vendor}</h3>
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  {items.length} menu
+                </span>
+              </div>
+              <div className="-mx-5 mt-4 flex snap-x gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none]">
+                {items.map((product) => (
+                  <div
+                    key={product.id}
+                    className="w-[44%] shrink-0 snap-start sm:w-[30%] lg:w-[23%]"
+                  >
+                    <ProductCard product={product} onOpen={setDetail} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </main>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
