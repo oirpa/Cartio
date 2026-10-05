@@ -52,8 +52,8 @@ function Index() {
           <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:text-base">
             Pilih menu favoritmu, atur topping, dan pesanan langsung dikirim ke gedung
             kelasmu. Bayar gampang lewat WhatsApp.
-            <h1 className="mt-4 text-xl font-bold">Dikirim setiap hari sabtu pagi jam 7:30 ya!</h1>
           </p>
+          <p className="mt-4 text-xl font-bold">Dikirim setiap hari sabtu pagi jam 7:30 ya!</p>
           <Button size="lg" className="mt-7" asChild>
             <a href="#menu">Pesan Sekarang</a>
           </Button>
