@@ -63,8 +63,14 @@ export function CartDrawer({
               Belum ada menu di keranjang.
             </p>
           ) : (
+            <div className="space-y-5">
+              {[...new Set(cart.map((i) => i.vendorName ?? "Lainnya"))].map((vendor) => (
+              <div key={vendor}>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-primary">
+                {vendor}
+              </p>
             <ul className="space-y-3">
-              {cart.map((item) => {
+              {cart.filter((i) => (i.vendorName ?? "Lainnya") === vendor).map((item) => {
                 const unit = item.price + item.addOns.reduce((s, a) => s + a.price, 0);
                 return (
                   <li
@@ -118,6 +124,9 @@ export function CartDrawer({
                 );
               })}
             </ul>
+              </div>
+              ))}
+            </div>
           )}
 
           <div className="space-y-3 border-t border-border pt-5">

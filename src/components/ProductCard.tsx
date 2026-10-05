@@ -55,6 +55,9 @@ export function ProductCard({
         <h3 className="truncate text-sm font-bold text-foreground sm:text-base">
           {product.title}
         </h3>
+        <p className="mt-0.5 truncate text-xs font-medium text-primary/70">
+          By: {product.vendorName ?? "Lainnya"}
+        </p>
         <p className="mt-0.5 text-sm text-muted-foreground">{formatIDR(product.price)}</p>
       </div>
     </article>
