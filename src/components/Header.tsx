@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart } from "lucide-react";
 
+import { EatEightLogo } from "@/components/EatEightLogo";
 import { useStore } from "@/lib/store";
 
 export function Header({ onCartClick }: { onCartClick: () => void }) {
@@ -9,13 +10,8 @@ export function Header({ onCartClick }: { onCartClick: () => void }) {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background shadow-sm">
       <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3">
-        <Link to="/" className="flex min-w-0 items-center gap-2" aria-label="EatEight">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-lg font-black text-primary-foreground">
-            8
-          </span>
-          <span className="text-xl font-black tracking-tight text-foreground sm:text-2xl">
-            Eat<span className="text-primary">Eight</span>
-          </span>
+        <Link to="/" className="flex min-w-0 items-center" aria-label="EatEight">
+          <EatEightLogo className="h-11 w-auto max-w-full sm:h-12" />
         </Link>
         <button
           onClick={onCartClick}
