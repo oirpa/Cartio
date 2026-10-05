@@ -18,11 +18,11 @@ const getPassword = () =>
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Dashboard — Cartio" },
-      { name: "description", content: "Kelola menu dan ketersediaan produk Cartio." },
+      { title: "Admin Dashboard — EatEight" },
+      { name: "description", content: "Kelola menu dan ketersediaan produk EatEight." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin Dashboard — Cartio" },
-      { property: "og:description", content: "Kelola menu Cartio." },
+      { property: "og:title", content: "Admin Dashboard — EatEight" },
+      { property: "og:description", content: "Kelola menu EatEight." },
     ],
   }),
   component: AdminPage,
@@ -36,6 +36,7 @@ type FormState = {
   image: string;
   addOns: string;
   category: string;
+  vendorName: string;
 };
 
 const emptyForm: FormState = {
@@ -46,6 +47,7 @@ const emptyForm: FormState = {
   image: "",
   addOns: "",
   category: "Paket Nasi",
+  vendorName: "",
 };
 
 function toForm(product: Product): FormState {
@@ -57,6 +59,7 @@ function toForm(product: Product): FormState {
     image: product.image,
     addOns: product.addOns.map((a) => `${a.name}:${a.price}`).join(", "),
     category: product.category ?? "Paket Nasi",
+    vendorName: product.vendorName ?? "",
   };
 }
 
@@ -76,7 +79,7 @@ function AdminPage() {
           className="card-soft w-full max-w-sm space-y-4 rounded-2xl border border-border bg-card p-6"
         >
           <div>
-            <h1 className="text-xl font-black text-primary">Cartio Admin</h1>
+            <h1 className="text-xl font-black text-primary">EatEight Admin</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Masukkan password untuk mengelola menu.
             </p>
@@ -168,10 +171,11 @@ function AdminDashboard() {
       title: form.title.trim(),
       description: form.description.trim(),
       price: Number(form.price) || 0,
-      image: form.image.trim() || "https://placehold.co/600x600?text=Cartio",
+      image: form.image.trim() || "https://placehold.co/600x600?text=EatEight",
       soldOut: products.find((p) => p.id === form.id)?.soldOut ?? false,
       addOns,
       category: form.category,
+      vendorName: form.vendorName.trim() || "Lainnya",
     });
 
     toast.success(editing ? "Menu diperbarui" : "Menu ditambahkan");
@@ -183,7 +187,7 @@ function AdminDashboard() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 border-b border-border bg-background/90 px-4 py-3 backdrop-blur">
         <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-          <h1 className="truncate text-lg font-black text-primary">Cartio Admin</h1>
+          <h1 className="truncate text-lg font-black text-primary">EatEight Admin</h1>
           <Button variant="outline" size="sm" asChild>
             <Link to="/">Lihat Toko</Link>
           </Button>
@@ -243,6 +247,15 @@ function AdminDashboard() {
               type="number"
               value={form.price}
               onChange={(e) => update({ price: e.target.value })}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="vendor">Nama Vendor</Label>
+            <Input
+              id="vendor"
+              value={form.vendorName}
+              onChange={(e) => update({ vendorName: e.target.value })}
+              placeholder="Contoh: Group 1 Kitchen"
             />
           </div>
           <div className="space-y-1.5">

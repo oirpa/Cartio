@@ -24,6 +24,7 @@ export type Product = {
   soldOut: boolean;
   addOns: AddOn[];
   category?: string | undefined;
+  vendorName?: string | undefined;
 };
 
 export const CATEGORIES = ["Paket Nasi", "Minuman", "Add On"] as const;
@@ -36,16 +37,18 @@ export type CartItem = {
   quantity: number;
   addOns: AddOn[];
   note?: string | undefined;
+  vendorName?: string | undefined;
 };
 
-const PRODUCTS_KEY = "cartio.products.v1";
-const CART_KEY = "cartio.cart.v1";
+const PRODUCTS_KEY = "eateight.products.v2";
+const CART_KEY = "eateight.cart.v2";
 
 export const WHATSAPP_NUMBER = "62895370004561";
 
 export const defaultProducts: Product[] = [
   {
     id: "p1",
+    vendorName: "Group 1 Kitchen",
     category: "Paket Nasi",
     title: "Nasi Ayam Geprek",
     description: "Ayam crispy digeprek sambal bawang, nasi hangat, lalapan.",
@@ -59,6 +62,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p2",
+    vendorName: "Group 1 Kitchen",
     category: "Paket Nasi",
     title: "Nasi Goreng Spesial",
     description: "Nasi goreng kampung dengan telur mata sapi dan acar.",
@@ -69,6 +73,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p3",
+    vendorName: "Group 3 Bowl",
     category: "Paket Nasi",
     title: "Chicken Katsu Bowl",
     description: "Katsu ayam saus teriyaki dengan salad segar.",
@@ -79,6 +84,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p4",
+    vendorName: "Group 2 Drinks",
     category: "Minuman",
     title: "Es Teh Manis Jumbo",
     description: "Teh melati dingin segar ukuran jumbo 500ml.",
@@ -157,6 +163,7 @@ export function CartioProvider({ children }: { children: ReactNode }) {
           quantity,
           addOns,
           note: cleanNote || undefined,
+          vendorName: product.vendorName ?? "Lainnya",
         },
       ];
     });
@@ -241,17 +248,26 @@ export function buildWhatsAppUrl(args: {
   cart: CartItem[];
   total: number;
 }) {
-  const lines = args.cart.map((i) => {
+  const vendors = [...new Set(args.cart.map((i) => i.vendorName ?? "Lainnya"))];
+  const lineFor = (i: CartItem) => {
     const itemTotal = i.quantity * (i.price + i.addOns.reduce((s, a) => s + a.price, 0));
     const extras = i.addOns.length
       ? "\n   + " + i.addOns.map((a) => `${a.name} (${formatIDR(a.price)})`).join(", ")
       : "";
     const note = i.note ? `\n   Catatan: ${i.note}` : "";
     return `• ${i.quantity}x ${i.title}${extras}${note}\n   ${formatIDR(itemTotal)}`;
-  });
+  };
+  const lines = vendors.map(
+    (v) =>
+      `_${v}_\n` +
+      args.cart
+        .filter((i) => (i.vendorName ?? "Lainnya") === v)
+        .map(lineFor)
+        .join("\n"),
+  );
 
   const message =
-    "Halo Cartio, saya ingin memesan makanan:\n\n" +
+    "Halo EatEight, saya ingin memesan makanan:\n\n" +
     `*Nama:* ${args.name}\n` +
     `*Lokasi Pengiriman:* ${args.location}\n\n` +
     "*Pesanan:*\n" +
