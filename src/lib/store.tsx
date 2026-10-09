@@ -113,7 +113,14 @@ type StoreValue = {
   toggleSoldOut: (id: string) => void;
 };
 
-const StoreContext = createContext<StoreValue | null>(null);
+// Preserve context identity across Vite updates. Route-split consumers and the
+// root provider can otherwise briefly retain different module generations.
+const StoreContext: React.Context<StoreValue | null> =
+  import.meta.hot?.data.storeContext ?? createContext<StoreValue | null>(null);
+
+if (import.meta.hot) {
+  import.meta.hot.data.storeContext = StoreContext;
+}
 
 function read<T>(key: string, fallback: T): T {
   try {
