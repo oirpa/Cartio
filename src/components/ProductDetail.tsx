@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { formatIDR, useStore, type Product } from "@/lib/store";
@@ -38,31 +39,32 @@ export function ProductDetail({
 
   return (
     <Dialog open={!!product} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex h-dvh max-h-dvh w-full max-w-full flex-col gap-0 overflow-hidden rounded-none border-0 p-0 sm:h-[90vh] sm:max-w-lg sm:rounded-3xl [&>button]:hidden">
+      <DialogContent className="flex h-dvh max-h-dvh w-full max-w-full flex-col gap-0 overflow-hidden rounded-none border-0 p-0 sm:h-[90vh] sm:max-w-lg sm:rounded-lg [&>button]:hidden">
         <div className="flex-1 overflow-y-auto">
           <div className="relative bg-tile px-10 pb-8 pt-14">
-            <button
+            <Button variant="outline" size="icon"
               type="button"
               onClick={onClose}
               aria-label="Kembali"
               className="absolute left-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-background shadow-sm"
             >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+            </Button>
             <img
               src={product.image}
               alt={product.title}
-              className="mx-auto aspect-square w-full max-w-xs rounded-3xl object-cover"
+              className="mx-auto aspect-square w-full max-w-xs rounded-lg object-cover"
             />
           </div>
 
           <div className="space-y-7 px-6 py-6">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="min-w-0">
-                <DialogTitle className="text-2xl font-extrabold leading-tight">
+                <DialogTitle className="text-2xl font-extrabold leading-tight text-primary">
                   {product.title}
                 </DialogTitle>
-                <p className="mt-2 text-sm text-muted-foreground">{product.description}</p>
+                <p className="mt-2 text-xs text-muted-foreground">By: {product.vendorName ?? "Lainnya"}</p>
+                <p className="mt-3 text-sm font-normal text-muted-foreground">{product.description}</p>
               </div>
               <p className="shrink-0 text-lg font-bold text-primary">
                 {formatIDR(product.price)}
@@ -106,36 +108,37 @@ export function ProductDetail({
             </div>
 
             <div className="flex items-center justify-center gap-6">
-              <button
+              <Button variant="outline" size="icon"
                 type="button"
                 aria-label="Kurangi"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 className="grid h-10 w-10 place-items-center rounded-full border border-border"
               >
                 <Minus className="h-4 w-4" />
-              </button>
+              </Button>
               <span className="w-6 text-center text-lg font-bold">{qty}</span>
-              <button
+              <Button variant="outline" size="icon"
                 type="button"
                 aria-label="Tambah"
                 onClick={() => setQty((q) => q + 1)}
                 className="grid h-10 w-10 place-items-center rounded-full border border-primary text-primary"
               >
                 <Plus className="h-4 w-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
 
         <div className="border-t border-border bg-background p-4">
-          <button
+          <Button
             type="button"
             disabled={product.soldOut}
             onClick={handleAdd}
-            className="h-13 w-full rounded-full bg-primary py-3.5 text-base font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:bg-muted disabled:text-muted-foreground"
+            className="h-12 w-full justify-between bg-primary px-4 text-sm font-bold text-primary-foreground shadow-none disabled:bg-muted disabled:text-muted-foreground"
           >
-            {product.soldOut ? "Out of Stock" : `Add to Cart · ${formatIDR(total)}`}
-          </button>
+            <span>{product.soldOut ? "Out of Stock" : "Add to Cart"}</span>
+            {!product.soldOut && <span className="text-base font-extrabold text-accent">{formatIDR(total)}</span>}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
