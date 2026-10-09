@@ -18,11 +18,13 @@ const getPassword = () =>
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin Dashboard — EatEight" },
-      { name: "description", content: "Kelola menu dan ketersediaan produk EatEight." },
+      { title: "Admin Dashboard — TEMU" },
+      { name: "description", content: "Kelola menu dan ketersediaan produk TEMU." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Admin Dashboard — EatEight" },
-      { property: "og:description", content: "Kelola menu EatEight." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { property: "og:title", content: "Admin Dashboard — TEMU" },
+      { property: "og:description", content: "Kelola menu TEMU." },
     ],
   }),
   component: AdminPage,
@@ -79,7 +81,7 @@ function AdminPage() {
           className="card-soft w-full max-w-sm space-y-4 rounded-2xl border border-border bg-card p-6"
         >
           <div>
-            <h1 className="text-xl font-black text-primary">EatEight Admin</h1>
+            <h1 className="text-xl font-extrabold text-primary">TEMU Admin</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Masukkan password untuk mengelola menu.
             </p>
@@ -171,7 +173,7 @@ function AdminDashboard() {
       title: form.title.trim(),
       description: form.description.trim(),
       price: Number(form.price) || 0,
-      image: form.image.trim() || "https://placehold.co/600x600?text=EatEight",
+      image: form.image.trim() || "https://placehold.co/600x600?text=TEMU",
       soldOut: products.find((p) => p.id === form.id)?.soldOut ?? false,
       addOns,
       category: form.category,
@@ -185,9 +187,9 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-border bg-primary px-4 py-3 text-primary-foreground">
         <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-          <h1 className="truncate text-lg font-black text-primary">EatEight Admin</h1>
+          <h1 className="truncate text-lg font-extrabold text-primary-foreground">TEMU Admin</h1>
           <Button variant="outline" size="sm" asChild>
             <Link to="/">Lihat Toko</Link>
           </Button>
@@ -255,7 +257,7 @@ function AdminDashboard() {
               id="vendor"
               value={form.vendorName}
               onChange={(e) => update({ vendorName: e.target.value })}
-              placeholder="Contoh: Group 1 Kitchen"
+              placeholder="Contoh: Kedai Kelompok 3"
             />
           </div>
           <div className="space-y-1.5">

@@ -57,7 +57,7 @@ export function CartDrawer({
           </SheetTitle>
         </SheetHeader>
 
-        <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
+        <div className="min-h-24 flex-1 space-y-5 overflow-y-auto px-5 py-5">
           {cart.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted-foreground">
               Belum ada menu di keranjang.
@@ -75,11 +75,11 @@ export function CartDrawer({
                 return (
                   <li
                     key={item.key}
-                    className="rounded-xl border border-border bg-card p-3"
+                    className="rounded-lg border border-border bg-card p-3"
                   >
                     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                       <div className="min-w-0">
-                        <p className="truncate font-semibold">{item.title}</p>
+                        <p className="font-medium">{item.title}</p>
                         {item.addOns.length > 0 && (
                           <p className="mt-0.5 text-xs text-muted-foreground">
                             {item.addOns.map((a) => a.name).join(", ")}
@@ -89,13 +89,13 @@ export function CartDrawer({
                           {formatIDR(unit * item.quantity)}
                         </p>
                       </div>
-                      <button
+                      <Button variant="ghost" size="icon"
                         aria-label={`Hapus ${item.title}`}
                         onClick={() => removeItem(item.key)}
                         className="shrink-0 rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
-                      </button>
+                      </Button>
                     </div>
                     <div className="mt-3 flex items-center gap-2">
                       <Button
@@ -129,7 +129,14 @@ export function CartDrawer({
             </div>
           )}
 
-          <div className="space-y-3 border-t border-border pt-5">
+        </div>
+
+        <div className="max-h-[65dvh] shrink-0 space-y-3 overflow-y-auto border-t border-border bg-background px-5 py-4">
+          <div className="flex items-center justify-between text-sm">
+            <span className="font-bold">Total Pembayaran</span>
+            <span className="text-lg font-extrabold text-primary">{formatIDR(subtotal)}</span>
+          </div>
+          <div className="space-y-3">
             <div className="space-y-1.5">
               <Label htmlFor="nama">Nama Pemesan *</Label>
               <Input
@@ -158,15 +165,9 @@ export function CartDrawer({
               />
             </div>
           </div>
-        </div>
-
-        <div className="space-y-3 border-t border-border px-5 py-4">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Subtotal</span>
-            <span className="text-lg font-bold text-primary">{formatIDR(subtotal)}</span>
-          </div>
-          <Button className="w-full" size="lg" onClick={handleOrder}>
-            Pesan via WhatsApp
+          <Button className="h-12 w-full justify-between px-4 font-bold shadow-none" size="lg" onClick={handleOrder}>
+            <span>Checkout via WhatsApp</span>
+            <span className="text-base font-extrabold text-accent">{formatIDR(subtotal)}</span>
           </Button>
         </div>
       </SheetContent>
