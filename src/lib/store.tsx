@@ -48,7 +48,7 @@ export const WHATSAPP_NUMBER = "62895370004561";
 export const defaultProducts: Product[] = [
   {
     id: "p1",
-    vendorName: "Group 1 Kitchen",
+    vendorName: "Kedai Kelompok 3",
     category: "Paket Nasi",
     title: "Nasi Ayam Geprek",
     description: "Ayam crispy digeprek sambal bawang, nasi hangat, lalapan.",
@@ -62,7 +62,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p2",
-    vendorName: "Group 1 Kitchen",
+    vendorName: "Kedai Kelompok 3",
     category: "Paket Nasi",
     title: "Nasi Goreng Spesial",
     description: "Nasi goreng kampung dengan telur mata sapi dan acar.",
@@ -73,7 +73,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p3",
-    vendorName: "Group 3 Bowl",
+    vendorName: "Dapur Mahasiswa",
     category: "Paket Nasi",
     title: "Chicken Katsu Bowl",
     description: "Katsu ayam saus teriyaki dengan salad segar.",
@@ -84,7 +84,7 @@ export const defaultProducts: Product[] = [
   },
   {
     id: "p4",
-    vendorName: "Group 2 Drinks",
+    vendorName: "UMKM Kopi Fakultas",
     category: "Minuman",
     title: "Es Teh Manis Jumbo",
     description: "Teh melati dingin segar ukuran jumbo 500ml.",
@@ -267,7 +267,7 @@ export function buildWhatsAppUrl(args: {
   );
 
   const message =
-    "Halo EatEight, saya ingin memesan makanan:\n\n" +
+    "Halo TEMU, saya ingin memesan makanan:\n\n" +
     `*Nama:* ${args.name}\n` +
     `*Lokasi Pengiriman:* ${args.location}\n\n` +
     "*Pesanan:*\n" +
